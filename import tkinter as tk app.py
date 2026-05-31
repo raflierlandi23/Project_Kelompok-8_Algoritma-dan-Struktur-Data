@@ -228,3 +228,10 @@ class LibrarySystemGUI:
 
         self.label_queue_status = tk.Label(queue_box, text="Antrean Saat Ini: Kosong", bg=self.colors['bg_card'], font=("Arial", 9, "italic"), fg="#7F8C8D")
         self.label_queue_status.grid(row=2, column=0, columnspan=2, pady=5)
+
+        stack_box = tk.LabelFrame(left_side, text=" Log Aktivitas Sistem (Stack) ", font=self.fonts['title'], bg=self.colors['bg_card'])
+        stack_box.pack(fill="both", expand=True, ipady=5)
+
+        self.listbox_logs = tk.Listbox(stack_box, height=8, font=("Courier", 9), bg="#2C3E50", fg="#2ECC71")
+        self.listbox_logs.pack(fill="both", expand=True, padx=8, pady=5)
+        self.render_stack_logs()
