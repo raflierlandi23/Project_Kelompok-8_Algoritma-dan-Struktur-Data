@@ -88,3 +88,61 @@ class Queue:
 
     def to_list(self):
         return self.items
+
+class BSTNode:
+    def __init__(self, book):
+        self.isbn = book.isbn
+        self.book = book
+        self.left = None
+        self.right = None
+
+class BinarySearchTree:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, book):
+        self.root = self._insert_recursive(self.root, book)
+
+    def _insert_recursive(self, root, book):
+        if root is None:
+            return BSTNode(book)
+        if book.isbn == root.isbn:
+            root.book = book
+            return root
+        if book.isbn < root.isbn:
+            root.left = self._insert_recursive(root.left, book)
+        else:
+            root.right = self._insert_recursive(root.right, book)
+        return root
+
+    def search(self, isbn):
+        return self._search_recursive(self.root, isbn)
+
+    def _search_recursive(self, root, isbn):
+        if root is None or root.isbn == isbn:
+            return root
+        if isbn < root.isbn:
+            return self._search_recursive(root.left, isbn)
+        return self._search_recursive(root.right, isbn)
+
+    def rebuild(self, book_list):
+        self.root = None
+        for book in book_list:
+            self.insert(book)
+
+def selection_sort(arr):
+    n = len(arr)
+    for i in range(n - 1):
+        min_idx = i
+        for j in range(i + 1, n):
+            if arr[j].isbn < arr[min_idx].isbn:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    return arr
+
+def linear_search(arr, target_title):
+    matched_results = []
+    for book in arr:
+        if target_title.lower() in book.title.lower():
+            matched_results.append(book)
+    return matched_results
