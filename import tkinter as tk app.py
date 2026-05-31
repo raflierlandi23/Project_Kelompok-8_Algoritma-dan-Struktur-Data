@@ -176,4 +176,41 @@ class LibrarySystemGUI:
             self.books_db.append(book)
         self.bst_index.rebuild(self.books_db.to_list())
         self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), "Sistem berhasil dimuat dengan data katalog awal."))
+    
+    def setup_user_interface(self):
+        header = tk.Frame(self.window, bg=self.colors['bg_primary'], height=55)
+        header.pack(fill="x", side="top")
+        tk.Label(header, text="📚 MANAGEMENT LIBRARY INDUSTRIAL APP", font=("Arial", 14, "bold"), fg=self.colors['text_white'], bg=self.colors['bg_primary']).pack(pady=12)
+
+        workspace = tk.Frame(self.window, bg="#F4F6F7")
+        workspace.pack(fill="both", expand=True, padx=15, pady=10)
+
+        left_side = tk.Frame(workspace, bg="#F4F6F7", width=360)
+        left_side.pack(fill="both", side="left", padx=(0, 10))
+
+        right_side = tk.Frame(workspace, bg="#F4F6F7")
+        right_side.pack(fill="both", side="right", expand=True)
+
+        crud_box = tk.LabelFrame(left_side, text=" Form Modifikasi Buku (CRUD) ", font=self.fonts['title'], bg=self.colors['bg_card'])
+        crud_box.pack(fill="x", pady=(0, 10), ipady=5)
+
+        tk.Label(crud_box, text="ISBN / Kode Buku:", bg=self.colors['bg_card']).grid(row=0, column=0, padx=8, pady=6, sticky="w")
+        self.input_isbn = tk.Entry(crud_box, width=24)
+        self.input_isbn.grid(row=0, column=1, padx=8, pady=6)
+
+        tk.Label(crud_box, text="Judul Buku:", bg=self.colors['bg_card']).grid(row=1, column=0, padx=8, pady=6, sticky="w")
+        self.input_title = tk.Entry(crud_box, width=24)
+        self.input_title.grid(row=1, column=1, padx=8, pady=6)
+
+        tk.Label(crud_box, text="Nama Penulis:", bg=self.colors['bg_card']).grid(row=2, column=0, padx=8, pady=6, sticky="w")
+        self.input_author = tk.Entry(crud_box, width=24)
+        self.input_author.grid(row=2, column=1, padx=8, pady=6)
+
+        crud_buttons = tk.Frame(crud_box, bg=self.colors['bg_card'])
+        crud_buttons.grid(row=3, column=0, columnspan=2, pady=10)
+
+        tk.Button(crud_buttons, text="Tambah (Create)", bg="#27AE60", fg="white", width=12, font=("Arial", 9, "bold"), command=self.handle_create).grid(row=0, column=0, padx=3)
+        tk.Button(crud_buttons, text="Ubah (Update)", bg="#2980B9", fg="white", width=12, font=("Arial", 9, "bold"), command=self.handle_update).grid(row=0, column=1, padx=3)
+        tk.Button(crud_buttons, text="Hapus (Delete)", bg="#C0392B", fg="white", width=12, font=("Arial", 9, "bold"), command=self.handle_delete).grid(row=0, column=2, padx=3)
+
 
