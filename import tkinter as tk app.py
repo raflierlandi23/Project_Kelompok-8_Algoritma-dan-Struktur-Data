@@ -247,3 +247,6 @@ class LibrarySystemGUI:
         tk.Button(search_box, text="Cari (Linear Judul)", bg="#F39C12", fg="white", font=("Arial", 9, "bold"), command=self.handle_search_linear).grid(row=0, column=3, padx=4, pady=8)
         tk.Button(search_box, text="Urutkan (Selection Sort)", bg="#34495E", fg="white", font=("Arial", 9, "bold"), command=self.handle_sort_isbn).grid(row=0, column=4, padx=4, pady=8)
         tk.Button(search_box, text="Reset", bg="#7F8C8D", fg="white", font=("Arial", 9, "bold"), command=self.handle_reset_table).grid(row=0, column=5, padx=4, pady=8)
+
+        table_box = tk.LabelFrame(right_side, text=" Katalog Data Buku (Struktur LinkedList) ", font=self.fonts['title'], bg=self.colors['bg_card'])
+        table_box.pack(fill="both", expand=True)
