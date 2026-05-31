@@ -250,3 +250,11 @@ class LibrarySystemGUI:
 
         table_box = tk.LabelFrame(right_side, text=" Katalog Data Buku (Struktur LinkedList) ", font=self.fonts['title'], bg=self.colors['bg_card'])
         table_box.pack(fill="both", expand=True)
+
+        columns = ('isbn', 'title', 'author', 'status')
+        self.table = ttk.Treeview(table_box, columns=columns, show='headings')
+        
+        self.table.heading('isbn', text='ISBN / KODE')
+        self.table.heading('title', text='JUDUL BUKU KELOMPOK 8')
+        self.table.heading('author', text='NAMA PENULIS / REVISI')
+        self.table.heading('status', text='STATUS KETERSEDIAAN')
