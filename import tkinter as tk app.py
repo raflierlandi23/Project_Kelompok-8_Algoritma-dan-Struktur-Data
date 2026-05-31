@@ -235,3 +235,15 @@ class LibrarySystemGUI:
         self.listbox_logs = tk.Listbox(stack_box, height=8, font=("Courier", 9), bg="#2C3E50", fg="#2ECC71")
         self.listbox_logs.pack(fill="both", expand=True, padx=8, pady=5)
         self.render_stack_logs()
+
+        search_box = tk.LabelFrame(right_side, text=" Fitur Eksplorasi & Pencarian Buku ", font=self.fonts['title'], bg=self.colors['bg_card'])
+        search_box.pack(fill="x", pady=(0, 10), ipady=5)
+
+        tk.Label(search_box, text="Kata Kunci / ISBN:", bg=self.colors['bg_card']).grid(row=0, column=0, padx=10, pady=8)
+        self.input_search = tk.Entry(search_box, width=30)
+        self.input_search.grid(row=0, column=1, padx=5, pady=8)
+
+        tk.Button(search_box, text="Cari (BST ISBN)", bg="#16A085", fg="white", font=("Arial", 9, "bold"), command=self.handle_search_bst).grid(row=0, column=2, padx=4, pady=8)
+        tk.Button(search_box, text="Cari (Linear Judul)", bg="#F39C12", fg="white", font=("Arial", 9, "bold"), command=self.handle_search_linear).grid(row=0, column=3, padx=4, pady=8)
+        tk.Button(search_box, text="Urutkan (Selection Sort)", bg="#34495E", fg="white", font=("Arial", 9, "bold"), command=self.handle_sort_isbn).grid(row=0, column=4, padx=4, pady=8)
+        tk.Button(search_box, text="Reset", bg="#7F8C8D", fg="white", font=("Arial", 9, "bold"), command=self.handle_reset_table).grid(row=0, column=5, padx=4, pady=8)
