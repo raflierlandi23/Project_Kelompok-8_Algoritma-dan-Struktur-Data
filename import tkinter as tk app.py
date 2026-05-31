@@ -213,4 +213,18 @@ class LibrarySystemGUI:
         tk.Button(crud_buttons, text="Ubah (Update)", bg="#2980B9", fg="white", width=12, font=("Arial", 9, "bold"), command=self.handle_update).grid(row=0, column=1, padx=3)
         tk.Button(crud_buttons, text="Hapus (Delete)", bg="#C0392B", fg="white", width=12, font=("Arial", 9, "bold"), command=self.handle_delete).grid(row=0, column=2, padx=3)
 
+        queue_box = tk.LabelFrame(left_side, text=" Antrean Meja Layanan (Queue) ", font=self.fonts['title'], bg=self.colors['bg_card'])
+        queue_box.pack(fill="x", pady=(0, 10), ipady=5)
 
+        tk.Label(queue_box, text="Nama Pengunjung:", bg=self.colors['bg_card']).grid(row=0, column=0, padx=8, pady=6, sticky="w")
+        self.input_member = tk.Entry(queue_box, width=24)
+        self.input_member.grid(row=0, column=1, padx=8, pady=6)
+
+        queue_buttons = tk.Frame(queue_box, bg=self.colors['bg_card'])
+        queue_buttons.grid(row=1, column=0, columnspan=2, pady=5)
+
+        tk.Button(queue_buttons, text="Masuk Antrean", bg="#D35400", fg="white", width=12, font=("Arial", 9, "bold"), command=self.handle_enqueue).grid(row=0, column=0, padx=5)
+        tk.Button(queue_buttons, text="Panggil/Layani", bg="#8E44AD", fg="white", width=12, font=("Arial", 9, "bold"), command=self.handle_dequeue).grid(row=0, column=1, padx=5)
+
+        self.label_queue_status = tk.Label(queue_box, text="Antrean Saat Ini: Kosong", bg=self.colors['bg_card'], font=("Arial", 9, "italic"), fg="#7F8C8D")
+        self.label_queue_status.grid(row=2, column=0, columnspan=2, pady=5)
