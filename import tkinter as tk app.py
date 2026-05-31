@@ -146,3 +146,34 @@ def linear_search(arr, target_title):
         if target_title.lower() in book.title.lower():
             matched_results.append(book)
     return matched_results
+
+class LibrarySystemGUI:
+    def __init__(self, window):
+        self.window = window
+        self.window.title("Sistem Manajemen Perpustakaan - Kelompok Genap (Tema B)")
+        self.window.geometry("1000x680")
+        self.window.configure(bg="#F4F6F7")
+
+        self.books_db = LinkedList()
+        self.bst_index = BinarySearchTree()
+        self.audit_stack = Stack()
+        self.member_queue = Queue()
+
+        self.colors = {'bg_primary': '#2C3E50', 'bg_card': '#FFFFFF', 'text_white': '#FFFFFF', 'accent': '#16A085'}
+        self.fonts = {'title': ('Arial', 12, 'bold'), 'normal': ('Arial', 10)}
+
+        self.load_initial_data()
+        self.setup_user_interface()
+        self.render_table_data()
+
+    def load_initial_data(self):
+        initial_books = [
+            Book("101", "Algoritma dan Struktur Data", "Asisten Laboratorium"),
+            Book("103", "Pengantar Sistem Informasi", "Dosen SI"),
+            Book("102", "Manajemen Basis Data Relasional", "Teknik Informatika"),
+        ]
+        for book in initial_books:
+            self.books_db.append(book)
+        self.bst_index.rebuild(self.books_db.to_list())
+        self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), "Sistem berhasil dimuat dengan data katalog awal."))
+
