@@ -180,7 +180,7 @@ class LibrarySystemGUI:
     def setup_user_interface(self):
         header = tk.Frame(self.window, bg=self.colors['bg_primary'], height=55)
         header.pack(fill="x", side="top")
-        tk.Label(header, text="📚 MANAGEMENT LIBRARY INDUSTRIAL APP", font=("Arial", 14, "bold"), fg=self.colors['text_white'], bg=self.colors['bg_primary']).pack(pady=12)
+        tk.Label(header, text="📚SISTEM INFORMASI PERPUSTAKAAN", font=("Arial", 14, "bold"), fg=self.colors['text_white'], bg=self.colors['bg_primary']).pack(pady=12)
 
         workspace = tk.Frame(self.window, bg="#F4F6F7")
         workspace.pack(fill="both", expand=True, padx=15, pady=10)
