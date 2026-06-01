@@ -258,3 +258,25 @@ class LibrarySystemGUI:
         self.table.heading('title', text='JUDUL BUKU KELOMPOK 8')
         self.table.heading('author', text='NAMA PENULIS / REVISI')
         self.table.heading('status', text='STATUS KETERSEDIAAN')
+
+        self.tree.column("ISBN", width=90, anchor="center")
+        self.tree.column("Judul", width=240, anchor="w")
+        self.tree.column("Penulis", width=140, anchor="w")
+        self.tree.column("Status", width=90, anchor="center")
+        self.tree.pack(fill="both", expand=True, pady=5)
+        self.tree.bind("<<TreeviewSelect>>", self.handle_row_selection)
+
+        stack_box = tk.LabelFrame(right_side, text=" Log Operasi Sistem Terkini (LIFO Stack) ", font=self.fonts['title'], bg=self.colors['bg_card'])
+        stack_box.pack(fill="x", pady=(5, 0))
+
+        self.log_viewer = tk.Text(stack_box, height=5, bg="#ECF0F1", fg="#2C3E50", font=("Courier New", 9))
+        self.log_viewer.pack(fill="both", expand=True, padx=5, pady=5)
+        self.log_viewer.config(state="disabled")
+        self.render_stack_logs()
+
+    def render_table_data(self, custom_dataset=None):
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+        dataset = custom_dataset if custom_dataset is not None else self.books_db.to_list()
+        for book in dataset:
+            self.tree.insert("", "end", values=(book.isbn, book.title, book.author, book.status))
