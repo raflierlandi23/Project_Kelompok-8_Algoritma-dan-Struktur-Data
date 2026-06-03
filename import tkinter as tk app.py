@@ -293,3 +293,34 @@ class LibrarySystemGUI:
         else:
             status_text = " -> ".join(current_queue)
             self.label_queue_status.config(text=f"Antrean: {status_text}", fg="#D35400")
+    
+    def render_queue_status(self):
+        current_queue = self.member_queue.to_list()
+        if not current_queue:
+            self.label_queue_status.config(text="Antrean Saat Ini: Kosong", fg="#7F8C8D")
+        else:
+            status_text = " -> ".join(current_queue)
+            self.label_queue_status.config(text=f"Antrean: {status_text}", fg="#D35400")
+
+    def handle_create(self):
+        isbn = self.input_isbn.get().strip()
+        title = self.input_title.get().strip()
+        author = self.input_author.get().strip()
+
+        if not isbn or not title or not author:
+            messagebox.showerror("Eror Input", "Semua kolom form CRUD buku wajib diisi!")
+            return
+
+        if self.bst_index.search(isbn) is not None:
+            messagebox.showwarning("Duplikat", f"Buku dengan ISBN '{isbn}' sudah ada di database!")
+            return
+
+        new_book = Book(isbn, title, author)
+        self.books_db.append(new_book)
+        self.bst_index.insert(new_book)
+        
+        self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), f"CREATE: Sukses menambah buku '{title}' (ISBN: {isbn})."))
+        self.clear_crud_inputs()
+        self.render_table_data()
+        self.render_stack_logs()
+        messagebox.showinfo("Sukses", "Data buku baru berhasil ditambahkan!")
