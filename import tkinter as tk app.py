@@ -324,3 +324,28 @@ class LibrarySystemGUI:
         self.render_table_data()
         self.render_stack_logs()
         messagebox.showinfo("Sukses", "Data buku baru berhasil ditambahkan!")
+
+    def handle_delete(self):
+        isbn = self.input_isbn.get().strip()
+        if not isbn:
+            messagebox.showwarning("Gagal", "Pilih data buku dari tabel untuk dihapus!")
+            return
+
+        is_deleted = self.books_db.delete(isbn)
+        if not is_deleted:
+            messagebox.showerror("Gagal", f"Buku dengan ISBN '{isbn}' tidak ditemukan.")
+            return
+
+        self.bst_index.rebuild(self.books_db.to_list())
+        self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), f"DELETE: Menghapus buku ber-ISBN {isbn} dari katalog."))
+        self.clear_form_inputs()
+        self.render_table_data()
+        self.render_stack_logs()
+        messagebox.showinfo("Sukses", f"Buku dengan ISBN '{isbn}' telah dihapus dari sistem.")
+
+    def handle_sort(self):
+        current_data = self.books_db.to_list()
+        sorted_data = selection_sort(current_data)
+        self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), "SORT: Mengurutkan tabel katalog via Selection Sort murni."))
+        self.render_table_data(sorted_data)
+        self.render_stack_logs()
