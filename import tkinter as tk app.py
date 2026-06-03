@@ -280,3 +280,16 @@ class LibrarySystemGUI:
         dataset = custom_dataset if custom_dataset is not None else self.books_db.to_list()
         for book in dataset:
             self.tree.insert("", "end", values=(book.isbn, book.title, book.author, book.status))
+
+    def render_stack_logs(self):
+        self.listbox_logs.delete(0, tk.END)
+        for log in self.audit_stack.to_list_reversed():
+            self.listbox_logs.insert(tk.END, f"[{log[0]}] {log[1]}")
+
+    def render_queue_status(self):
+        current_queue = self.member_queue.to_list()
+        if not current_queue:
+            self.label_queue_status.config(text="Antrean Saat Ini: Kosong", fg="#7F8C8D")
+        else:
+            status_text = " -> ".join(current_queue)
+            self.label_queue_status.config(text=f"Antrean: {status_text}", fg="#D35400")
