@@ -349,8 +349,8 @@ class LibrarySystemGUI:
         self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), "SORT: Mengurutkan tabel katalog via Selection Sort murni."))
         self.render_table_data(sorted_data)
         self.render_stack_logs()
-
- def handle_search(self):
+    
+    def handle_search(self):
         query = self.input_search.get().strip()
         if not query:
             messagebox.showwarning("Kosong", "Masukkan kata kunci judul buku!")
