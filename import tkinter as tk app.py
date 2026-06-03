@@ -18,6 +18,7 @@ class LinkedList:
     def __init__(self):
         self.head = None
         self.size = 0
+
     def append(self, book):
         new_node = BookNode(book)
         if not self.head:
@@ -176,11 +177,11 @@ class LibrarySystemGUI:
             self.books_db.append(book)
         self.bst_index.rebuild(self.books_db.to_list())
         self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), "Sistem berhasil dimuat dengan data katalog awal."))
-    
+
     def setup_user_interface(self):
         header = tk.Frame(self.window, bg=self.colors['bg_primary'], height=55)
         header.pack(fill="x", side="top")
-        tk.Label(header, text="📚SISTEM INFORMASI PERPUSTAKAAN", font=("Arial", 14, "bold"), fg=self.colors['text_white'], bg=self.colors['bg_primary']).pack(pady=12)
+        tk.Label(header, text="📚 MANAGEMENT LIBRARY INDUSTRIAL APP", font=("Arial", 14, "bold"), fg=self.colors['text_white'], bg=self.colors['bg_primary']).pack(pady=12)
 
         workspace = tk.Frame(self.window, bg="#F4F6F7")
         workspace.pack(fill="both", expand=True, padx=15, pady=10)
@@ -213,51 +214,37 @@ class LibrarySystemGUI:
         tk.Button(crud_buttons, text="Ubah (Update)", bg="#2980B9", fg="white", width=12, font=("Arial", 9, "bold"), command=self.handle_update).grid(row=0, column=1, padx=3)
         tk.Button(crud_buttons, text="Hapus (Delete)", bg="#C0392B", fg="white", width=12, font=("Arial", 9, "bold"), command=self.handle_delete).grid(row=0, column=2, padx=3)
 
-        queue_box = tk.LabelFrame(left_side, text=" Antrean Meja Layanan (Queue) ", font=self.fonts['title'], bg=self.colors['bg_card'])
-        queue_box.pack(fill="x", pady=(0, 10), ipady=5)
+        queue_box = tk.LabelFrame(left_side, text=" Antrean Pengunjung (Queue) ", font=self.fonts['title'], bg=self.colors['bg_card'])
+        queue_box.pack(fill="x", pady=5, ipady=5)
 
-        tk.Label(queue_box, text="Nama Pengunjung:", bg=self.colors['bg_card']).grid(row=0, column=0, padx=8, pady=6, sticky="w")
-        self.input_member = tk.Entry(queue_box, width=24)
-        self.input_member.grid(row=0, column=1, padx=8, pady=6)
+        tk.Label(queue_box, text="Nama Member:", bg=self.colors['bg_card']).grid(row=0, column=0, padx=8, pady=8, sticky="w")
+        self.input_member = tk.Entry(queue_box, width=16)
+        self.input_member.grid(row=0, column=1, padx=8, pady=8)
 
-        queue_buttons = tk.Frame(queue_box, bg=self.colors['bg_card'])
-        queue_buttons.grid(row=1, column=0, columnspan=2, pady=5)
+        tk.Button(queue_box, text="Masuk Antrean", bg="#8E44AD", fg="white", font=("Arial", 8, "bold"), command=self.handle_enqueue).grid(row=0, column=2, padx=5)
 
-        tk.Button(queue_buttons, text="Masuk Antrean", bg="#D35400", fg="white", width=12, font=("Arial", 9, "bold"), command=self.handle_enqueue).grid(row=0, column=0, padx=5)
-        tk.Button(queue_buttons, text="Panggil/Layani", bg="#8E44AD", fg="white", width=12, font=("Arial", 9, "bold"), command=self.handle_dequeue).grid(row=0, column=1, padx=5)
+        self.label_queue_state = tk.Label(queue_box, text="Antrean Saat Ini: [ Kosong ]", bg=self.colors['bg_card'], fg="#7F8C8D", wraplength=330, justify="left")
+        self.label_queue_state.grid(row=1, column=0, columnspan=3, padx=8, pady=8, sticky="w")
 
-        self.label_queue_status = tk.Label(queue_box, text="Antrean Saat Ini: Kosong", bg=self.colors['bg_card'], font=("Arial", 9, "italic"), fg="#7F8C8D")
-        self.label_queue_status.grid(row=2, column=0, columnspan=2, pady=5)
+        tk.Button(queue_box, text="Panggil & Layani Antrean Terdepan", bg="#D35400", fg="white", font=("Arial", 9, "bold"), command=self.handle_dequeue).grid(row=2, column=0, columnspan=3, pady=5, sticky="we", padx=10)
 
-        stack_box = tk.LabelFrame(left_side, text=" Log Aktivitas Sistem (Stack) ", font=self.fonts['title'], bg=self.colors['bg_card'])
-        stack_box.pack(fill="both", expand=True, ipady=5)
+        toolbar = tk.Frame(right_side, bg="#F4F6F7")
+        toolbar.pack(fill="x", pady=(0, 5))
 
-        self.listbox_logs = tk.Listbox(stack_box, height=8, font=("Courier", 9), bg="#2C3E50", fg="#2ECC71")
-        self.listbox_logs.pack(fill="both", expand=True, padx=8, pady=5)
-        self.render_stack_logs()
+        tk.Label(toolbar, text="Cari Judul:", bg="#F4F6F7", font=("Arial", 9, "bold")).pack(side="left", padx=2)
+        self.input_search = tk.Entry(toolbar, width=20)
+        self.input_search.pack(side="left", padx=5)
 
-        search_box = tk.LabelFrame(right_side, text=" Fitur Eksplorasi & Pencarian Buku ", font=self.fonts['title'], bg=self.colors['bg_card'])
-        search_box.pack(fill="x", pady=(0, 10), ipady=5)
+        tk.Button(toolbar, text="Cari (Linear Search)", bg="#F39C12", fg="white", font=("Arial", 8, "bold"), command=self.handle_search).pack(side="left", padx=2)
+        tk.Button(toolbar, text="Reset View", bg="#7F8C8D", fg="white", font=("Arial", 8, "bold"), command=lambda: self.render_table_data()).pack(side="left", padx=5)
 
-        tk.Label(search_box, text="Kata Kunci / ISBN:", bg=self.colors['bg_card']).grid(row=0, column=0, padx=10, pady=8)
-        self.input_search = tk.Entry(search_box, width=30)
-        self.input_search.grid(row=0, column=1, padx=5, pady=8)
+        tk.Button(toolbar, text="Urutkan ISBN (Selection Sort)", bg="#16A085", fg="white", font=("Arial", 8, "bold"), command=self.handle_sort).pack(side="right", padx=2)
 
-        tk.Button(search_box, text="Cari (BST ISBN)", bg="#16A085", fg="white", font=("Arial", 9, "bold"), command=self.handle_search_bst).grid(row=0, column=2, padx=4, pady=8)
-        tk.Button(search_box, text="Cari (Linear Judul)", bg="#F39C12", fg="white", font=("Arial", 9, "bold"), command=self.handle_search_linear).grid(row=0, column=3, padx=4, pady=8)
-        tk.Button(search_box, text="Urutkan (Selection Sort)", bg="#34495E", fg="white", font=("Arial", 9, "bold"), command=self.handle_sort_isbn).grid(row=0, column=4, padx=4, pady=8)
-        tk.Button(search_box, text="Reset", bg="#7F8C8D", fg="white", font=("Arial", 9, "bold"), command=self.handle_reset_table).grid(row=0, column=5, padx=4, pady=8)
-
-        table_box = tk.LabelFrame(right_side, text=" Katalog Data Buku (Struktur LinkedList) ", font=self.fonts['title'], bg=self.colors['bg_card'])
-        table_box.pack(fill="both", expand=True)
-
-        columns = ('isbn', 'title', 'author', 'status')
-        self.table = ttk.Treeview(table_box, columns=columns, show='headings')
-        
-        self.table.heading('isbn', text='ISBN / KODE')
-        self.table.heading('title', text='JUDUL BUKU KELOMPOK 8')
-        self.table.heading('author', text='NAMA PENULIS / REVISI')
-        self.table.heading('status', text='STATUS KETERSEDIAAN')
+        self.tree = ttk.Treeview(right_side, columns=("ISBN", "Judul", "Penulis", "Status"), show="headings", height=13)
+        self.tree.heading("ISBN", text="ISBN / Kode Buku")
+        self.tree.heading("Judul", text="Judul Katalog Buku")
+        self.tree.heading("Penulis", text="Nama Penulis")
+        self.tree.heading("Status", text="Status")
 
         self.tree.column("ISBN", width=90, anchor="center")
         self.tree.column("Judul", width=240, anchor="w")
@@ -282,25 +269,34 @@ class LibrarySystemGUI:
             self.tree.insert("", "end", values=(book.isbn, book.title, book.author, book.status))
 
     def render_stack_logs(self):
-        self.listbox_logs.delete(0, tk.END)
-        for log in self.audit_stack.to_list_reversed():
-            self.listbox_logs.insert(tk.END, f"[{log[0]}] {log[1]}")
+        self.log_viewer.config(state="normal")
+        self.log_viewer.delete("1.0", tk.END)
+        for timestamp, action in self.audit_stack.to_list_reversed():
+            self.log_viewer.insert(tk.END, f"[{timestamp}] {action}\n")
+        self.log_viewer.config(state="disabled")
 
     def render_queue_status(self):
-        current_queue = self.member_queue.to_list()
-        if not current_queue:
-            self.label_queue_status.config(text="Antrean Saat Ini: Kosong", fg="#7F8C8D")
+        q_items = self.member_queue.to_list()
+        if not q_items:
+            self.label_queue_state.config(text="Antrean Saat Ini: [ Kosong ]", fg="#7F8C8D")
         else:
-            status_text = " -> ".join(current_queue)
-            self.label_queue_status.config(text=f"Antrean: {status_text}", fg="#D35400")
-    
-    def render_queue_status(self):
-        current_queue = self.member_queue.to_list()
-        if not current_queue:
-            self.label_queue_status.config(text="Antrean Saat Ini: Kosong", fg="#7F8C8D")
-        else:
-            status_text = " -> ".join(current_queue)
-            self.label_queue_status.config(text=f"Antrean: {status_text}", fg="#D35400")
+            line = " -> ".join([f"[{i+1}] {name}" for i, name in enumerate(q_items)])
+            self.label_queue_state.config(text=f"Antrean: {line}", fg="#2C3E50")
+
+    def handle_row_selection(self, event):
+        selection = self.tree.selection()
+        if not selection:
+            return
+        fields = self.tree.item(selection[0])['values']
+        self.clear_form_inputs()
+        self.input_isbn.insert(0, str(fields[0]))
+        self.input_title.insert(0, str(fields[1]))
+        self.input_author.insert(0, str(fields[2]))
+
+    def clear_form_inputs(self):
+        self.input_isbn.delete(0, tk.END)
+        self.input_title.delete(0, tk.END)
+        self.input_author.delete(0, tk.END)
 
     def handle_create(self):
         isbn = self.input_isbn.get().strip()
@@ -308,22 +304,46 @@ class LibrarySystemGUI:
         author = self.input_author.get().strip()
 
         if not isbn or not title or not author:
-            messagebox.showerror("Eror Input", "Semua kolom form CRUD buku wajib diisi!")
+            messagebox.showwarning("Gagal Simpan", "Seluruh data input wajib diisi lengkap!")
             return
 
         if self.bst_index.search(isbn) is not None:
-            messagebox.showwarning("Duplikat", f"Buku dengan ISBN '{isbn}' sudah ada di database!")
+            messagebox.showerror("Duplikasi ISBN", f"Gagal menambahkan, Buku dengan ID '{isbn}' sudah ada!")
             return
 
         new_book = Book(isbn, title, author)
         self.books_db.append(new_book)
-        self.bst_index.insert(new_book)
-        
-        self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), f"CREATE: Sukses menambah buku '{title}' (ISBN: {isbn})."))
-        self.clear_crud_inputs()
+        self.bst_index.rebuild(self.books_db.to_list())
+        self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), f"CREATE: Sukses menambah buku '{title}' [ISBN: {isbn}]"))
+
+        self.clear_form_inputs()
         self.render_table_data()
         self.render_stack_logs()
-        messagebox.showinfo("Sukses", "Data buku baru berhasil ditambahkan!")
+        messagebox.showinfo("Sukses", "Buku baru berhasil ditambahkan!")
+
+    def handle_update(self):
+        isbn = self.input_isbn.get().strip()
+        title = self.input_title.get().strip()
+        author = self.input_author.get().strip()
+
+        if not isbn:
+            messagebox.showwarning("Gagal", "Silakan masukkan nomor ISBN target yang ingin diperbarui!")
+            return
+
+        found_node = self.bst_index.search(isbn)
+        if found_node is None:
+            messagebox.showerror("Tidak Ditemukan", f"Buku dengan ISBN '{isbn}' tidak terdaftar.")
+            return
+
+        target_book = found_node.book
+        if title: target_book.title = title
+        if author: target_book.author = author
+
+        self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), f"UPDATE: Mengubah informasi rincian buku ISBN {isbn}"))
+        self.clear_form_inputs()
+        self.render_table_data()
+        self.render_stack_logs()
+        messagebox.showinfo("Sukses", "Data buku berhasil diperbarui!")
 
     def handle_delete(self):
         isbn = self.input_isbn.get().strip()
@@ -349,7 +369,7 @@ class LibrarySystemGUI:
         self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), "SORT: Mengurutkan tabel katalog via Selection Sort murni."))
         self.render_table_data(sorted_data)
         self.render_stack_logs()
-    
+
     def handle_search(self):
         query = self.input_search.get().strip()
         if not query:
