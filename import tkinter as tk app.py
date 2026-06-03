@@ -349,3 +349,47 @@ class LibrarySystemGUI:
         self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), "SORT: Mengurutkan tabel katalog via Selection Sort murni."))
         self.render_table_data(sorted_data)
         self.render_stack_logs()
+
+ def handle_search(self):
+        query = self.input_search.get().strip()
+        if not query:
+            messagebox.showwarning("Kosong", "Masukkan kata kunci judul buku!")
+            return
+
+        all_records = self.books_db.to_list()
+        filtered_results = linear_search(all_records, query)
+        self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), f"SEARCH: Menelusuri kata kunci '{query}' lewat Linear Search."))
+        self.render_stack_logs()
+
+        if not filtered_results:
+            messagebox.showinfo("Info Pencarian", f"Tidak ada judul buku yang mengandung kata '{query}'.")
+        else:
+            self.render_table_data(filtered_results)
+
+    def handle_enqueue(self):
+        member_name = self.input_member.get().strip()
+        if not member_name:
+            messagebox.showwarning("Kosong", "Ketik nama member terlebih dahulu!")
+            return
+
+        self.member_queue.enqueue(member_name)
+        self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), f"QUEUE: '{member_name}' masuk antrean meja admin."))
+        self.input_member.delete(0, tk.END)
+        self.render_queue_status()
+        self.render_stack_logs()
+
+    def handle_dequeue(self):
+        served_member = self.member_queue.dequeue()
+        if served_member is None:
+            messagebox.showinfo("Antrean Kosong", "Tidak ada antrean pengunjung saat ini.")
+            return
+
+        self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), f"DEQUEUE: Memanggil & melayani member '{served_member}'."))
+        self.render_queue_status()
+        self.render_stack_logs()
+        messagebox.showinfo("Panggilan Layanan", f"Panggilan: Silakan member atas nama '{served_member}' merapat ke meja admin!")
+
+if __name__ == "__main__":
+    app_window = tk.Tk()
+    app_engine = LibrarySystemGUI(app_window)
+    app_window.mainloop()
