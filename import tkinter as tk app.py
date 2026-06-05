@@ -154,15 +154,12 @@ class LibrarySystemGUI:
         self.window.title("Sistem Manajemen Perpustakaan - Kelompok Genap (Tema B)")
         self.window.geometry("1000x680")
         self.window.configure(bg="#F4F6F7")
-
         self.books_db = LinkedList()
         self.bst_index = BinarySearchTree()
         self.audit_stack = Stack()
         self.member_queue = Queue()
-
         self.colors = {'bg_primary': '#2C3E50', 'bg_card': '#FFFFFF', 'text_white': '#FFFFFF', 'accent': '#16A085'}
         self.fonts = {'title': ('Arial', 12, 'bold'), 'normal': ('Arial', 10)}
-
         self.load_initial_data()
         self.setup_user_interface()
         self.render_table_data()
@@ -237,7 +234,6 @@ class LibrarySystemGUI:
 
         tk.Button(toolbar, text="Cari (Linear Search)", bg="#F39C12", fg="white", font=("Arial", 8, "bold"), command=self.handle_search).pack(side="left", padx=2)
         tk.Button(toolbar, text="Reset View", bg="#7F8C8D", fg="white", font=("Arial", 8, "bold"), command=lambda: self.render_table_data()).pack(side="left", padx=5)
-
         tk.Button(toolbar, text="Urutkan ISBN (Selection Sort)", bg="#16A085", fg="white", font=("Arial", 8, "bold"), command=self.handle_sort).pack(side="right", padx=2)
 
         self.tree = ttk.Treeview(right_side, columns=("ISBN", "Judul", "Penulis", "Status"), show="headings", height=13)
@@ -245,7 +241,6 @@ class LibrarySystemGUI:
         self.tree.heading("Judul", text="Judul Katalog Buku")
         self.tree.heading("Penulis", text="Nama Penulis")
         self.tree.heading("Status", text="Status")
-
         self.tree.column("ISBN", width=90, anchor="center")
         self.tree.column("Judul", width=240, anchor="w")
         self.tree.column("Penulis", width=140, anchor="w")
@@ -403,7 +398,6 @@ class LibrarySystemGUI:
         if served_member is None:
             messagebox.showinfo("Antrean Kosong", "Tidak ada antrean pengunjung saat ini.")
             return
-
         self.audit_stack.push((datetime.now().strftime("%H:%M:%S"), f"DEQUEUE: Memanggil & melayani member '{served_member}'."))
         self.render_queue_status()
         self.render_stack_logs()
